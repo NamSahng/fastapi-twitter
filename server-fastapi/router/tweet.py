@@ -1,9 +1,10 @@
 import enum
 from typing import Union
 import time
-from fastapi import APIRouter, Response
-from starlette.responses import JSONResponse
-from starlette.requests import Request
+from fastapi import APIRouter, Response, Request
+from fastapi.responses import JSONResponse
+# from starlette.responses import JSONResponse
+# from starlette.requests import Request
 from pydantic import BaseModel
 router = APIRouter(prefix='/tweets')
 
@@ -51,6 +52,7 @@ def get_tweet(tweet_id: str):
         return JSONResponse(status_code=200, content=found_tweet)
 
 
+# 그냥 리퀘스트로 할 때도 그런지
 @router.post('/')
 async def create_tweet(request: Request):
     req = await request.json()
@@ -65,6 +67,20 @@ async def create_tweet(request: Request):
     tweets.insert(0,new_tweet)
     return JSONResponse(status_code=201, content=new_tweet)
 
+# @router.post('/')
+# async def create_tweet(request: Request):
+#     req = await request.json()
+
+#     new_tweet = {
+#         "id": str(int(tweets[-1]['id'])+1),
+#         "text": req['text'],
+#         "createdAt": str(int(time.time() * 1000)), # js에서 new Date()
+#         "name": req['name'],
+#         "username": req['username'],
+#     }
+#     tweets.insert(0,new_tweet)
+#     return JSONResponse(status_code=201, content=new_tweet)
+
 
 @router.put('/{tweet_id}')
 async def modify_tweet(tweet_id: str, request: Request):
@@ -74,6 +90,16 @@ async def modify_tweet(tweet_id: str, request: Request):
             tweets[i]['text'] = req['text']
             return JSONResponse(status_code=200, content=tweet)
     return JSONResponse(status_code=404, content=dict(msg=(f'tweet id: {tweet_id} not found')))
+
+
+# @router.put('/{tweet_id}')
+# async def modify_tweet(tweet_id: str, request: Request):
+#     req = await request.json()
+#     for i, tweet in enumerate(tweets):
+#         if tweet['id'] == tweet_id:
+#             tweets[i]['text'] = req['text']
+#             return JSONResponse(status_code=200, content=tweet)
+#     return JSONResponse(status_code=404, content=dict(msg=(f'tweet id: {tweet_id} not found')))
 
 # https://www.binaryflavor.com/fastapi-yi-204/
 # https://github.com/tiangolo/fastapi/issues/717
