@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const NewTweetForm = ({ tweetService, onError }) => {
+const NewTweetForm = ({ tweetService, onError, onCreated }) => {
   const [tweet, setTweet] = useState('');
 
   const onSubmit = async (event) => {
@@ -9,6 +9,7 @@ const NewTweetForm = ({ tweetService, onError }) => {
       .postTweet(tweet)
       .then((created) => {
         setTweet('');
+        onCreated(created);
       })
       .catch(onError);
   };
