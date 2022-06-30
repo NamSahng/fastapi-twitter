@@ -5,6 +5,7 @@ export async function getTweets(req, res) {
   const data = await (username
     ? tweetRepository.getAllByUsername(username)
     : tweetRepository.getAll());
+  console.log(data);
   res.status(200).json(data);
 }
 
