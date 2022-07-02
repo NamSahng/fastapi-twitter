@@ -1,4 +1,4 @@
-server-fastapi/.env
+server/.env
 __pycache__
 .vscode
 node_modules
