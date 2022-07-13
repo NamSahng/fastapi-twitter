@@ -32,7 +32,7 @@ async def getTweet(id: int, token : dict = Depends(isAuth), db : Session = Depen
 @router.post("/", response_model=schemas.TweetOut, status_code=201)
 async def createTweet(newTweet: schemas.TweetNew, token : dict = Depends(isAuth), db : Session = Depends(get_db)):
     tweet = await tweetRepository.create(db, newTweet, int(token['userId']))
-    # 소켓 통신
+    # TODO: 소켓통신 추가
     return tweet
 
 @router.put("/{id}", response_model=schemas.TweetOut, status_code=200)

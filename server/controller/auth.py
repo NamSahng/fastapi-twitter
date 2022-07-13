@@ -32,7 +32,6 @@ async def signUp(newUser: schemas.UserCreate, db : Session = Depends(get_db)):
 
 @router.post("/login", response_model=schemas.UserOut, status_code=200)
 async def login(loginUser: schemas.UserBase, db : Session = Depends(get_db)):
-    print(loginUser)
     found = await userRepository.findByUsername(db, username=loginUser.username)
     if not found:
         raise HTTPException(status_code=400, detail="Invalid user or password")

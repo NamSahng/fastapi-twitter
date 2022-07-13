@@ -9,10 +9,6 @@ from typing import Union
 
 
 async def isAuth(Authorization: Union[str, None] = Header()):
-    # print("*" * 200)
-    # print(Authorization)
-    # print("*" * 200)
-    print("isAuth")
     jwtToken = Authorization
     JWT_SECRET = "F2dN7x8HVzBWaQuEEDnhsvHXRWqAR63z"
     JWT_ALGORITHM = "HS256"
