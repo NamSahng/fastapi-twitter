@@ -31,10 +31,10 @@ $ npm start                 # run client
 ## server/.env
 ```bash
 DB_HOST=<DB_HOST>
-DB_USER=<DB_USER>
-DB_DATABASE=<DB_DATABASE>
 DB_PORT=<DB_PORT>
+DB_USER=<DB_USER>
 DB_PASSWORD=<DB_PASSWORD>
+DB_DATABASE=<DB_DATABASE>
 JWT_SECRET=<JWT_SECRET>
 JWT_EXPIRES_HOUR=<JWT_EXPIRES_HOUR>
 BCRYPT_SALT_ROUNDS=<BCRYPT_SALT_ROUNDS>
@@ -46,3 +46,6 @@ CORS_ALLOW_ORIGIN=<CORS_ALLOW_ORIGIN>
 - socket
 - Heroku serving
 - CI/CD
+
+## References
+- Create Database: https://github.com/riseryan89/notification-api

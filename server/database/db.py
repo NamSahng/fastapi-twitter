@@ -1,18 +1,29 @@
 import os
 import dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+from database import models
 dotenv.load_dotenv()
 
-db_host = os.getenv('DB_HOST')
-user_name = os.getenv('DB_USER')
-user_pwd = os.getenv('DB_PASSWORD')
-db_name = os.getenv('DB_DATABASE')
-db_port = os.getenv('DB_PORT')
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+DB_USER = os.getenv('DB_USER')
+DB_PWD = os.getenv('DB_PASSWORD')
+DB_NAME = os.getenv('DB_DATABASE')
 
-SQLALCHEMY_DATABASE_URL = f"mysql://{user_name}:{user_pwd}@{db_host}:{db_port}/{db_name}?charset=utf8"
+SQLALCHEMY_URL = f"mysql://{DB_USER}:{DB_PWD}@{DB_HOST}:{DB_PORT}"
+SQLALCHEMY_DATABASE_URL = SQLALCHEMY_URL + f"/{DB_NAME}?charset=utf8mb4"
+
+def _database_exist(engine, schema_name):
+    query = f"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{schema_name}'"
+    with engine.connect() as conn:
+        result_proxy = conn.execute(query)
+        result = result_proxy.scalar()
+        return bool(result)
+
+def _create_database(engine, schema_name):
+    with engine.connect() as conn:
+        conn.execute(f"CREATE DATABASE {schema_name} CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;")
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
@@ -22,8 +33,16 @@ engine = create_engine(
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
 
+def init_database(engine=engine, schema_name=DB_NAME):
+    db_engine = create_engine(SQLALCHEMY_URL)
+
+    # create Database
+    if not _database_exist(db_engine, schema_name):
+        _create_database(db_engine, schema_name)
+
+    # create Tables
+    models.Base.metadata.create_all(bind=engine)
 
 def get_db():
     db = SessionLocal()

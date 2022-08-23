@@ -5,10 +5,12 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from routes import auth, tweet
+from database.db import init_database
 
 
 
 def create_app():
+    init_database()
     app = FastAPI()
 
     app.add_middleware(

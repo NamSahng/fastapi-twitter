@@ -8,8 +8,9 @@ from sqlalchemy import (
     func
 )
 from sqlalchemy.orm import relationship
-from database.db import Base
+from sqlalchemy.ext.declarative import declarative_base
 
+Base = declarative_base()
 class Users(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -27,7 +28,7 @@ class Tweets(Base):
     text = Column(TEXT, nullable=True)
     createdAt = Column(DateTime(timezone=True), nullable=False, default=func.now())
     updatedAt = Column(DateTime(timezone=True), nullable=False, default=func.now(), onupdate=func.now())
-    userId = Column(String(45), ForeignKey("users.id"), nullable=False)
+    userId = Column(Integer, ForeignKey("users.id"), nullable=False)
     user = relationship("Users", back_populates="tweets")
 
 
