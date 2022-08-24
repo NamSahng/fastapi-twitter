@@ -3,6 +3,26 @@
 Changing web framework, Express.js to FAST API. Based on this
 [repo](https://github.com/NamSahng/Twitter_nodejs_pjt).
 
+## Result
+
+<img src = "./img/sample_img.png" width="50%">
+
+## prerequisite
+- Install and run MySQL server
+- set server/.env
+```
+DB_HOST=<DB_HOST>
+DB_PORT=<DB_PORT>
+DB_USER=<DB_USER>
+DB_PASSWORD=<DB_PASSWORD>
+DB_NAME=<DB_NAME>
+JWT_SECRET=<JWT_SECRET>
+JWT_EXPIRES_SEC=86400
+JWT_ALGORITHM=HS256
+BCRYPT_SALT_ROUNDS=12
+CORS_ALLOW_ORIGIN=*
+```
+
 
 ## How to run
 - Server:  
@@ -27,19 +47,6 @@ $ npm start                 # run client
     - http://127.0.0.1:9999/redoc
 - openapi.json
     - http://127.0.0.1:9999/openapi.json
-
-## server/.env
-```bash
-DB_HOST=<DB_HOST>
-DB_PORT=<DB_PORT>
-DB_USER=<DB_USER>
-DB_PASSWORD=<DB_PASSWORD>
-DB_DATABASE=<DB_DATABASE>
-JWT_SECRET=<JWT_SECRET>
-JWT_EXPIRES_HOUR=<JWT_EXPIRES_HOUR>
-BCRYPT_SALT_ROUNDS=<BCRYPT_SALT_ROUNDS>
-CORS_ALLOW_ORIGIN=<CORS_ALLOW_ORIGIN>
-```
 
 ## Todo
 - set config files
