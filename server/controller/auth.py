@@ -1,4 +1,6 @@
 import jwt
+import os
+from dotenv import load_dotenv
 import bcrypt
 from datetime import datetime, timedelta
 
@@ -10,16 +12,13 @@ import data.auth as userRepository
 from database import schemas
 from middleware.auth import isAuth
 
-
+load_dotenv()
 # https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-in-path-operation-decorators/
 router = APIRouter()
 
-JWT_SECRET = "F2dN7x8HVzBWaQuEEDnhsvHXRWqAR63z"
-JWT_ALGORITHM = "HS256"
-bcryptSaltRounds = 12
-
 @router.post("/signup", response_model=schemas.UserOut, status_code=201)
 async def signUp(newUser: schemas.UserCreate, db : Session = Depends(get_db)):
+    bcryptSaltRounds = int(os.getenv("BCRYPT_SALT_ROUNDS"))
     found = await userRepository.findByUsername(db, newUser.username)
     if found:
         raise HTTPException(status_code=400, detail="Username exists")
@@ -51,9 +50,12 @@ async def me(token : dict = Depends(isAuth), db : Session = Depends(get_db)):
     
 
 def createAccessToken(data: dict = None, expires_delta: int = 1):
-    to_encode = data.copy()
+    jwtSecret = os.getenv("JWT_SECRET")
+    jwtAlrgorithm = os.getenv("JWT_ALGORITHM")
+    jwtExpiresSec = int(os.getenv("JWT_EXPIRES_SEC"))
+    toEncode = data.copy()
     if expires_delta:
-        to_encode.update({"exp": datetime.utcnow() + timedelta(hours=expires_delta)})
-    encoded_jwt = jwt.encode(to_encode, JWT_SECRET, algorithm=JWT_ALGORITHM)
+        toEncode.update({"exp": datetime.utcnow() + timedelta(seconds=jwtExpiresSec)})
+    encoded_jwt = jwt.encode(toEncode, jwtSecret, algorithm=jwtAlrgorithm)
     return encoded_jwt
 
